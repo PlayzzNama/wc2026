@@ -400,9 +400,11 @@ app.get('/api/health', (_req, res) => res.json({ ok: true, time: Date.now() }));
 let bot = null;
 
 if (BOT_TOKEN) {
-  // Use polling for development / easy start. For production use setWebHook.
-  bot = new TelegramBot(BOT_TOKEN, { polling: true });
+  const webhookUrl = process.env.WEBHOOK_URL; // Set this to your backend public URL on Render (e.g. https://your-backend.onrender.com)
 
+  bot = new TelegramBot(BOT_TOKEN, { polling: !webhookUrl });
+
+  // Common handlers (work for both polling and webhook)
   bot.onText(/\/start/, async (msg) => {
     const chatId = msg.chat.id;
     const user = msg.from;
@@ -447,11 +449,24 @@ if (BOT_TOKEN) {
     );
   });
 
-  bot.on('polling_error', (err) => {
-    console.error('Telegram polling error:', err.message);
-  });
+  if (webhookUrl) {
+    const hookPath = `/bot${BOT_TOKEN}`;
+    bot.setWebHook(`${webhookUrl}${hookPath}`);
 
-  console.log('🤖 Telegram bot is polling. Send /start to your bot to test the WebApp button.');
+    app.post(hookPath, (req, res) => {
+      bot.processUpdate(req.body);
+      res.sendStatus(200);
+    });
+
+    console.log(`🤖 Telegram bot using webhook: ${webhookUrl}${hookPath}`);
+  } else {
+    // Polling mode (for local development)
+    bot.on('polling_error', (err) => {
+      console.error('Telegram polling error:', err.message);
+    });
+
+    console.log('🤖 Telegram bot is polling. Send /start to your bot to test the WebApp button.');
+  }
 }
 
 // ---------- Serve built frontend in production (optional) ----------
