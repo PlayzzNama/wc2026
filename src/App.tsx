@@ -833,6 +833,11 @@ function App() {
             (Viewing {viewedUser.name}’s data • You are saving predictions as your own account)
           </div>
         )}
+
+        {/* Temporary debug info - remove later */}
+        <div className="text-[9px] text-center text-tg-text-secondary opacity-60 mt-1">
+          API: {API_BASE || 'same-origin'} | initData: {initData ? 'yes' : 'no'} | authId: {authUserId}
+        </div>
       </div>
 
       {/* Tabs */}
