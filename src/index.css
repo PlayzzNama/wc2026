@@ -1,0 +1,140 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --tg-theme-bg-color: #0f172a;
+  --tg-theme-secondary-bg-color: #1e293b;
+  --tg-theme-text-color: #f1f5f9;
+  --tg-theme-hint-color: #94a3b8;
+  --tg-theme-button-color: #3b82f6;
+  --tg-theme-button-text-color: #ffffff;
+  --tg-theme-link-color: #60a5fa;
+}
+
+body {
+  background: var(--tg-theme-bg-color);
+  color: var(--tg-theme-text-color);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.tg-card {
+  background: var(--tg-theme-secondary-bg-color);
+  border: 1px solid rgba(148, 163, 184, 0.15);
+  border-radius: 14px;
+}
+
+.tg-button {
+  background: var(--tg-theme-button-color);
+  color: var(--tg-theme-button-text-color);
+  font-weight: 600;
+  border-radius: 10px;
+  padding: 10px 18px;
+  transition: transform 0.1s ease, opacity 0.1s ease;
+}
+
+.tg-button:active {
+  transform: scale(0.98);
+  opacity: 0.9;
+}
+
+.tg-button-secondary {
+  background: rgba(148, 163, 184, 0.15);
+  color: var(--tg-theme-text-color);
+}
+
+.score-input {
+  width: 52px;
+  height: 44px;
+  background: var(--tg-theme-bg-color);
+  border: 2px solid rgba(148, 163, 184, 0.3);
+  border-radius: 10px;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--tg-theme-text-color);
+  outline: none;
+}
+
+.score-input:focus {
+  border-color: var(--tg-theme-button-color);
+}
+
+.match-card {
+  transition: all 0.2s ease;
+}
+
+.prediction-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.outcome-win {
+  color: #22c55e;
+}
+
+.outcome-draw {
+  color: #eab308;
+}
+
+.outcome-loss {
+  color: #ef4444;
+}
+
+.points-positive {
+  color: #22c55e;
+  font-weight: 700;
+}
+
+.points-negative {
+  color: #ef4444;
+  font-weight: 700;
+}
+
+.leaderboard-row {
+  transition: background 0.2s;
+}
+
+.admin-badge {
+  background: #f59e0b;
+  color: #0f172a;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 1px 7px;
+  border-radius: 9999px;
+  letter-spacing: 0.5px;
+}
+
+.tab {
+  padding: 10px 16px;
+  font-weight: 600;
+  border-bottom: 3px solid transparent;
+  color: var(--tg-theme-hint-color);
+  transition: all 0.15s;
+}
+
+.tab.active {
+  color: var(--tg-theme-text-color);
+  border-bottom-color: var(--tg-theme-button-color);
+}
+
+.status-badge {
+  font-size: 11px;
+  padding: 2px 9px;
+  border-radius: 999px;
+  font-weight: 600;
+}
+
+.status-upcoming {
+  background: rgba(59, 130, 246, 0.2);
+  color: #60a5fa;
+}
+
+.status-finished {
+  background: rgba(34, 197, 94, 0.2);
+  color: #4ade80;
+}
