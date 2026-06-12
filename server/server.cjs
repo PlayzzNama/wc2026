@@ -274,29 +274,41 @@ app.get('/api/state', (req, res) => {
 
 // Save or update a prediction (any logged in TG user)
 app.post('/api/predict', (req, res) => {
+  console.log('=== /api/predict request received ===');
+  console.log('Body keys:', Object.keys(req.body));
+  console.log('matchId:', req.body.matchId, 'home:', req.body.home, 'away:', req.body.away);
+  console.log('initData present:', !!req.body.initData, 'length:', req.body.initData ? req.body.initData.length : 0);
+  console.log('devUserId:', req.body.devUserId, 'targetUserId:', req.body.targetUserId);
+
   const { matchId, home, away, initData } = req.body;
 
   if (typeof matchId !== 'number' || typeof home !== 'number' || typeof away !== 'number') {
+    console.log('Bad request - invalid numbers');
     return res.status(400).json({ error: 'Bad request' });
   }
 
   const user = validateInitData(initData, BOT_TOKEN);
   if (!user) {
     console.warn('validateInitData failed for /api/predict. initData present?', !!initData, 'BOT_TOKEN set?', !!BOT_TOKEN);
-    // Allow devUserId fallback (useful when testing by opening the link directly in browser)
     const devId = Number(req.body.devUserId);
     if (devId) {
-      // allow
+      console.log('Using devUserId fallback:', devId);
     } else {
+      console.log('No valid user and no devUserId - rejecting');
       return res.status(401).json({ error: 'Unauthorized - invalid Telegram data. Please open the mini-app from inside Telegram.' });
     }
   }
 
   const currentUserId = user ? user.id : Number(req.body.devUserId);
+  console.log('Effective currentUserId:', currentUserId);
 
   const match = db.matches.find(m => m.id === matchId);
-  if (!match) return res.status(404).json({ error: 'Match not found' });
+  if (!match) {
+    console.log('Match not found:', matchId);
+    return res.status(404).json({ error: 'Match not found' });
+  }
   if (match.status === 'finished') {
+    console.log('Match is finished, cannot predict');
     return res.status(400).json({ error: 'Cannot predict on finished match' });
   }
 
@@ -305,6 +317,7 @@ app.post('/api/predict', (req, res) => {
   const requestedTarget = Number(req.body.targetUserId);
   if (requestedTarget && isAdmin(currentUserId)) {
     targetUserId = requestedTarget;
+    console.log('Admin overriding target to:', targetUserId);
   }
 
   // Save prediction
@@ -312,6 +325,7 @@ app.post('/api/predict', (req, res) => {
   db.predictions[matchId][targetUserId] = { home, away };
 
   saveDB(db);
+  console.log('Prediction saved successfully for user', targetUserId, 'on match', matchId);
 
   res.json({ success: true, savedFor: targetUserId });
 });
@@ -350,6 +364,10 @@ app.post('/api/match', (req, res) => {
 
 // Admin only: set or update result for a match (finishes it or corrects score)
 app.post('/api/finish-match', (req, res) => {
+  console.log('=== /api/finish-match request ===');
+  console.log('matchId:', req.body.matchId, 'scores:', req.body.homeScore, req.body.awayScore);
+  console.log('initData present:', !!req.body.initData, 'devUserId:', req.body.devUserId);
+
   const { matchId, homeScore, awayScore, initData } = req.body;
 
   const user = validateInitData(initData, BOT_TOKEN);
@@ -361,6 +379,7 @@ app.post('/api/finish-match', (req, res) => {
   }
 
   if (typeof matchId !== 'number' || typeof homeScore !== 'number' || typeof awayScore !== 'number') {
+    console.log('Bad request for finish-match');
     return res.status(400).json({ error: 'Bad request' });
   }
 
@@ -375,8 +394,8 @@ app.post('/api/finish-match', (req, res) => {
   };
 
   saveDB(db);
+  console.log('Match finished successfully:', matchId, 'score', homeScore, '-', awayScore);
 
-  // Optional: notify the other player via bot (simple broadcast to known users later)
   res.json({ success: true, match: db.matches[matchIndex] });
 });
 

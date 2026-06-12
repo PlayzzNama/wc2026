@@ -406,7 +406,8 @@ function App() {
       if (!res.ok) {
         const err = await res.json().catch(() => ({}));
         console.error('Save prediction error:', err);
-        alert(`Failed to save prediction on server: ${err.error || res.statusText || 'Unknown error'}.\n\nCurrent API: ${API_BASE || 'same-origin (wrong for Netlify)'}\n\nYou probably need to set VITE_API_URL in Netlify environment variables to your backend URL.`);
+        const apiTarget = API_BASE || 'same-origin (Netlify itself - wrong!)';
+        alert(`Failed to save prediction on server: ${err.error || res.statusText || 'Unknown error'} (status ${res.status}).\n\nAPI target: ${apiTarget}\n\n1. Make sure VITE_API_URL is set on Netlify to your Render backend URL.\n2. Redeploy frontend on Netlify after setting the env var.\n3. Open the app from inside Telegram (not direct link) for real initData.`);
       } else {
         // Refresh from server to stay in sync
         const stateRes = await fetch(`${API_BASE}/api/state`);
