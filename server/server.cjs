@@ -283,12 +283,12 @@ app.post('/api/predict', (req, res) => {
   const user = validateInitData(initData, BOT_TOKEN);
   if (!user) {
     console.warn('validateInitData failed for /api/predict. initData present?', !!initData, 'BOT_TOKEN set?', !!BOT_TOKEN);
-    // In development we allow a fallback using devUserId
+    // Allow devUserId fallback (useful when testing by opening the link directly in browser)
     const devId = Number(req.body.devUserId);
-    if (process.env.NODE_ENV !== 'production' && devId) {
-      // dev mode only
+    if (devId) {
+      // allow
     } else {
-      return res.status(401).json({ error: 'Unauthorized - invalid Telegram data' });
+      return res.status(401).json({ error: 'Unauthorized - invalid Telegram data. Please open the mini-app from inside Telegram.' });
     }
   }
 

@@ -390,9 +390,10 @@ function App() {
         home: editing.home,
         away: editing.away,
         initData,
-        targetUserId: isRealAdmin ? targetId : undefined,   // only admins can specify target
+        targetUserId: isRealAdmin ? targetId : undefined,
       };
-      if (!initData && (authUserId === 1 || authUserId === 2)) {
+      if (!initData) {
+        // Allow dev mode when opened directly in browser (no Telegram initData)
         body.devUserId = authUserId;
       }
 
@@ -452,7 +453,9 @@ function App() {
       awayScore: resultAway,
       initData,
     };
-    if (!initData && (authUserId === 1 || authUserId === 2)) payload.devUserId = authUserId;
+    if (!initData) {
+      payload.devUserId = authUserId;
+    }
 
     try {
       const res = await fetch(`${API_BASE}/api/finish-match`, {
