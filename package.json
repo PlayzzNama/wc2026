@@ -6,8 +6,8 @@
   "scripts": {
     "dev": "concurrently \"npm:dev:server\" \"npm:dev:client\"",
     "dev:client": "vite",
-    "dev:server": "node server/server.js",
-    "server": "node server/server.js",
+    "dev:server": "node server/server.cjs",
+    "server": "node server/server.cjs",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview"

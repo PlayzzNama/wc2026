@@ -127,7 +127,7 @@ BOT_TOKEN=8977354914:AAFrmrKNnZC9fxnRDyvtIlPvj6-82uOKsPg
 
 ## Розгортання на продакшен (важливо!)
 
-**Netlify / Vercel / GitHub Pages** — це тільки статичний хостинг для фронтенду. Вони **не вміють** запускати Node.js бекенд (`server/server.js` з Express і ботом).
+**Netlify / Vercel / GitHub Pages** — це тільки статичний хостинг для фронтенду. Вони **не вміють** запускати Node.js бекенд (`server/server.cjs` з Express і ботом).
 
 Тому треба розгортати **фронтенд** і **бекенд окремо**.
 
@@ -148,7 +148,7 @@ BOT_TOKEN=8977354914:AAFrmrKNnZC9fxnRDyvtIlPvj6-82uOKsPg
    - **Name**: `wc2026-backend`
    - **Runtime**: `Node`
    - **Build Command**: `npm install`
-   - **Start Command**: `node server/server.js`
+   - **Start Command**: `node server/server.cjs`
    - **Plan**: Free
 5. Додай Environment Variables:
    - `BOT_TOKEN` = `8977354914:AAFrmrKNnZC9fxnRDyvtIlPvj6-82uOKsPg`
