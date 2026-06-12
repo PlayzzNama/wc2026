@@ -142,7 +142,9 @@ const STORAGE_KEY = 'wc2026_predictor_v1';
 // 3. Same origin (if you deploy frontend + backend together)
 const getApiBase = (): string => {
   const envUrl = (import.meta as any).env?.VITE_API_URL as string | undefined;
-  if (envUrl) return envUrl.replace(/\/$/, ''); // remove trailing slash
+  if (envUrl) {
+    return envUrl.replace(/\/+$/, ''); // remove trailing slashes
+  }
 
   if (typeof window !== 'undefined') {
     const host = window.location.hostname;
@@ -834,9 +836,9 @@ function App() {
           </div>
         )}
 
-        {/* Temporary debug info - remove later */}
-        <div className="text-[9px] text-center text-tg-text-secondary opacity-60 mt-1">
-          API: {API_BASE || 'same-origin'} | initData: {initData ? 'yes' : 'no'} | authId: {authUserId}
+        {/* Debug info */}
+        <div className="text-[9px] text-center text-tg-text-secondary opacity-60 mt-1 break-all">
+          API: {API_BASE || 'same-origin (Netlify)'} | initData: {initData ? 'yes' : 'no'} | authId: {authUserId}
         </div>
       </div>
 
