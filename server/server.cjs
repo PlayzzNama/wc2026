@@ -412,7 +412,8 @@ app.post('/api/export', (req, res) => {
   res.json({ success: true, data: db, exportedAt: new Date().toISOString() });
 });
 
-// Simple health
+// Simple health (both paths for convenience)
+app.get('/health', (_req, res) => res.json({ ok: true, time: Date.now() }));
 app.get('/api/health', (_req, res) => res.json({ ok: true, time: Date.now() }));
 
 // ---------- Telegram Bot ----------
